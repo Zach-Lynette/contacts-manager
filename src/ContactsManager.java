@@ -1,9 +1,12 @@
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import util.FileHelper;
 
 public class ContactsManager {
-    Scanner scan = new Scanner(System.in);
+    public static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
+        addContact();
         viewContacts();
 //        do {
 //            System.out.println("1. View contact");
@@ -22,6 +25,14 @@ public class ContactsManager {
         System.out.println("  Name  | Phone number");
         System.out.println("-----------------------");
         FileHelper.slurp("contacts.txt");
+    }
+    public static void addContact(){
+        System.out.println("What is the name of the contact?");
+        String name = scan.nextLine();
+        System.out.println("What is the phone number of the contact?");
+        String phoneNumber = scan.nextLine();
+        List<String> contact = Arrays.asList("\n" + name + " | " + phoneNumber);
+        FileHelper.spit("contacts.txt", contact, true);
     }
 
 
