@@ -3,26 +3,45 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import util.FileHelper;
+import util.Input;
 
 public class ContactsManager {
     public static Scanner scan = new Scanner(System.in);
+    private static Input input = new Input();
     public static void main(String[] args) {
-//        addContact();
-//        viewContacts();
-//        searchContact();
-        deleteContact();
-        viewContacts();
-//        do {
-//            System.out.println("1. View contact");
-//            System.out.println("2. Add a new contact.");
-//            System.out.println("3. Search a contact by name");
-//            System.out.println("4. Delete an existing contact.");
-//            System.out.println("5. Exit");
-//            System.out.println("Enter an option (1, 2, 3, 4 or 5):");
-//
-//
-//        }
-//        while(){};
+            int option;
+        do {
+            System.out.println("----------------------------------------");
+            System.out.println("Contact Manager");
+            System.out.println("----------------------------------------");
+            System.out.println("1. View contact list");
+            System.out.println("2. Add a new contact");
+            System.out.println("3. Search a contact by name");
+            System.out.println("4. Delete an existing contact");
+            System.out.println("5. Exit");
+            System.out.println("Enter an option:");
+            option = input.getInt(1, 5);
+            switch (option){
+                case 1:
+                    viewContacts();
+                    break;
+                case 2:
+                    addContact();
+                    break;
+                case 3:
+                    searchContact();
+                    break;
+                case 4:
+                    deleteContact();
+                    break;
+                case 5:
+                    System.out.println("Goodbye");
+                    break;
+                default:
+                    System.out.println("Invalid option");
+            }
+        }
+        while(option != 5);
     }
 
     public static void viewContacts(){
@@ -51,7 +70,6 @@ public class ContactsManager {
                 System.out.println(line);
             }
         }
-
     }
     public static void deleteContact(){
         List <String> searchResults = new ArrayList<>();
@@ -59,7 +77,7 @@ public class ContactsManager {
         System.out.println("Enter contact name to delete:");
         String name = scan.nextLine();
         List<String> list = FileHelper.slurp("contacts.txt");
-        for (int i = 0; i < list.size(); i += 1) {
+        for (int i = 0; i < list.size(); i += 1) { //should make method for the for loop(printing out results to delete)
             if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
                 searchResults.add(list.get(i));
             }
@@ -71,13 +89,17 @@ public class ContactsManager {
                 }
                 newList.add(list.get(i));
             }
-            FileHelper.spit("contacts.txt", newList);
+        }else if (searchResults.size() > 1){
+            System.out.println(searchResults);
+            System.out.println("Please be more specific...");
+            name = scan.nextLine();
+            for (int i = 0; i < list.size(); i += 1) {
+                if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
+                    continue;
+                }
+                newList.add(list.get(i));
+            }
         }
-//        System.out.println("  Name  | Phone number");
-//        System.out.println("-----------------------");
-
+        FileHelper.spit("contacts.txt", newList);
     }
-
-
-
 }
