@@ -1,3 +1,5 @@
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,15 @@ public class ContactsManager {
     private static Input input = new Input();
     public static void main(String[] args) {
             int option;
+            if(!Files.exists(Paths.get("contacts.txt"))) {
+                System.out.println("START YOUR CONTACT LIST!");
+                System.out.println("Enter contact name: ");
+                String initialName = input.getString();
+                System.out.println("Enter contact phone number: ");
+                String number = input.getString();
+                number = formattedNumber(number);
+                FileHelper.spit("contacts.txt", Arrays.asList(String.format("%15s | %13s", initialName, number)));
+            }
         do {
             System.out.println("----------------------------------------");
             System.out.println("            Contact Manager");
@@ -62,6 +73,7 @@ public class ContactsManager {
                 System.out.println("There's already a contact named " + name + ". Do you want to overwrite it? (Yes/No)");
                 if (input.yesNo()) {
                     deleteContact(name);
+                    input.getString();
                     break;
                 }
                 else {
@@ -72,20 +84,15 @@ public class ContactsManager {
         }
         System.out.println("Please enter the contact phone-number:");
         String phoneNumber = scan.nextLine();
-        input.getString();
-        if (phoneNumber.length() == 7){
-            phoneNumber= phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3);
-        } else if (phoneNumber.length() == 10){
-            phoneNumber = "(" +phoneNumber.substring(0,3) + ") " + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6);
-        }
-        List<String> contact = Arrays.asList(String.format("%15s | %13s", name, phoneNumber));
+        phoneNumber = formattedNumber(phoneNumber);
+        List<String> contact = Arrays.asList(String.format("%17s | %13s", name, phoneNumber));
         FileHelper.spit("contacts.txt", contact, true);
     }
     public static void searchContact(){
         System.out.println("Enter contact name to search:");
         String name = scan.nextLine();
-        System.out.println("  Name  | Phone number");
-        System.out.println("-----------------------");
+        System.out.println("          Name  | Phone number");
+        System.out.println("---------------------------------------");
         int count = 0;
         for (String line: FileHelper.slurp("contacts.txt")){
             if (line.toLowerCase().contains(name.toLowerCase())){
@@ -139,5 +146,13 @@ public class ContactsManager {
             }
             newList.add(oldList.get(i));
         }
+    }
+    public static String formattedNumber(String phoneNumber){
+        if (phoneNumber.length() == 7){
+            return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3);
+        } else if (phoneNumber.length() == 10){
+            return "(" +phoneNumber.substring(0,3) + ") " + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6);
+        }
+        return phoneNumber;
     }
 }
