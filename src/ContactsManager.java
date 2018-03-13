@@ -70,6 +70,7 @@ public class ContactsManager {
                 System.out.println(line);
             }
         }
+
     }
     public static void deleteContact(){
         List <String> searchResults = new ArrayList<>();
@@ -77,29 +78,31 @@ public class ContactsManager {
         System.out.println("Enter contact name to delete:");
         String name = scan.nextLine();
         List<String> list = FileHelper.slurp("contacts.txt");
-        for (int i = 0; i < list.size(); i += 1) { //should make method for the for loop(printing out results to delete)
+        for (int i = 0; i < list.size(); i += 1) {
             if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
                 searchResults.add(list.get(i));
             }
         }
         if(searchResults.size() == 1){
-            for (int i = 0; i < list.size(); i += 1) {
-                if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
-                    continue;
-                }
-                newList.add(list.get(i));
-            }
+            addToList(list, newList, name);
         }else if (searchResults.size() > 1){
             System.out.println(searchResults);
             System.out.println("Please be more specific...");
             name = scan.nextLine();
-            for (int i = 0; i < list.size(); i += 1) {
-                if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
-                    continue;
-                }
-                newList.add(list.get(i));
-            }
+            addToList(list, newList, name);
+        } else {
+            System.out.println("No contact by that name.");
+            newList = list;
         }
         FileHelper.spit("contacts.txt", newList);
+    }
+
+    public static void addToList(List<String> oldList, List<String> newList, String name){
+        for (int i = 0; i < oldList.size(); i += 1) {
+            if (oldList.get(i).toLowerCase().contains(name.toLowerCase())) {
+                continue;
+            }
+            newList.add(oldList.get(i));
+        }
     }
 }
