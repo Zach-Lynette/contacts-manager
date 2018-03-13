@@ -12,7 +12,7 @@ public class ContactsManager {
             int option;
         do {
             System.out.println("----------------------------------------");
-            System.out.println("Contact Manager");
+            System.out.println("            Contact Manager");
             System.out.println("----------------------------------------");
             System.out.println("1. View contact list");
             System.out.println("2. Add a new contact");
@@ -53,13 +53,29 @@ public class ContactsManager {
         }
     }
     public static void addContact(){
+        List <String> newList = new ArrayList<>();
         System.out.println("Please enter the contact name:");
         String name = scan.nextLine();
+        int count = 0;
+        for (String line: FileHelper.slurp("contacts.txt")){
+            if (name.equalsIgnoreCase(line.substring(0, line.indexOf(" | ")).trim())){
+                System.out.println("There's already a contact named " + name + ". Do you want to overwrite it? (Yes/No)");
+                if (input.yesNo()) {
+                    deleteContact(name);
+                    break;
+                }
+                else {
+                    input.getString();
+                    return;
+                }
+            }
+        }
         System.out.println("Please enter the contact phone-number:");
         String phoneNumber = scan.nextLine();
+        input.getString();
         if (phoneNumber.length() == 7){
             phoneNumber= phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3);
-        }else if (phoneNumber.length() == 10){
+        } else if (phoneNumber.length() == 10){
             phoneNumber = "(" +phoneNumber.substring(0,3) + ") " + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6);
         }
         List<String> contact = Arrays.asList(String.format("%15s | %13s", name, phoneNumber));
@@ -107,6 +123,12 @@ public class ContactsManager {
             System.out.println("No contact by that name.");
             newList = list;
         }
+        FileHelper.spit("contacts.txt", newList);
+    }
+    public static void deleteContact(String name){
+        List<String> newList = new ArrayList<>();
+        List<String> list = FileHelper.slurp("contacts.txt");
+        addToList(list, newList, name);
         FileHelper.spit("contacts.txt", newList);
     }
 
