@@ -6,8 +6,9 @@ import util.FileHelper;
 public class ContactsManager {
     public static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
-        addContact();
-        viewContacts();
+//        addContact();
+//        viewContacts();
+        searchContact();
 //        do {
 //            System.out.println("1. View contact");
 //            System.out.println("2. Add a new contact.");
@@ -24,15 +25,30 @@ public class ContactsManager {
     public static void viewContacts(){
         System.out.println("  Name  | Phone number");
         System.out.println("-----------------------");
-        FileHelper.slurp("contacts.txt");
+        List<String> list = FileHelper.slurp("contacts.txt");
+        for (int i = 0; i < list.size(); i += 1) {
+            System.out.println(list.get(i));
+        }
     }
     public static void addContact(){
-        System.out.println("What is the name of the contact?");
+        System.out.println("Please enter the contact name:");
         String name = scan.nextLine();
-        System.out.println("What is the phone number of the contact?");
+        System.out.println("Please enter the 10-digit contact phone number:");
         String phoneNumber = scan.nextLine();
-        List<String> contact = Arrays.asList("\n" + name + " | " + phoneNumber);
+        List<String> contact = Arrays.asList(name + " | " + phoneNumber);
         FileHelper.spit("contacts.txt", contact, true);
+    }
+    public static void searchContact(){
+        System.out.println("Enter contact name to search:");
+        String name = scan.nextLine();
+        System.out.println("  Name  | Phone number");
+        System.out.println("-----------------------");
+        for (String line: FileHelper.slurp("contacts.txt")){
+            if (line.toLowerCase().contains(name.toLowerCase())){
+                System.out.println(line);
+            }
+        }
+
     }
 
 

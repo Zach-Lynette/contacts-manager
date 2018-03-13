@@ -19,9 +19,7 @@ public class FileHelper {
 
         try{
             list = Files.readAllLines(Paths.get(filepath));
-            for (int i = 0; i < list.size(); i += 1) {
-                System.out.println(list.get(i));
-            }
+
             return list;
 
         }catch(IOException e){
