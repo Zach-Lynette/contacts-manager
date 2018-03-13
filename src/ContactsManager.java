@@ -45,8 +45,8 @@ public class ContactsManager {
     }
 
     public static void viewContacts(){
-        System.out.println("  Name  | Phone number");
-        System.out.println("-----------------------");
+        System.out.println("          Name  | Phone number");
+        System.out.println("---------------------------------------");
         List<String> list = FileHelper.slurp("contacts.txt");
         for (int i = 0; i < list.size(); i += 1) {
             System.out.println(list.get(i));
@@ -55,9 +55,14 @@ public class ContactsManager {
     public static void addContact(){
         System.out.println("Please enter the contact name:");
         String name = scan.nextLine();
-        System.out.println("Please enter the 10-digit contact phone number:");
+        System.out.println("Please enter the contact phone-number:");
         String phoneNumber = scan.nextLine();
-        List<String> contact = Arrays.asList(name + " | " + phoneNumber);
+        if (phoneNumber.length() == 7){
+            phoneNumber= phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3);
+        }else if (phoneNumber.length() == 10){
+            phoneNumber = "(" +phoneNumber.substring(0,3) + ") " + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6);
+        }
+        List<String> contact = Arrays.asList(String.format("%15s | %13s", name, phoneNumber));
         FileHelper.spit("contacts.txt", contact, true);
     }
     public static void searchContact(){
@@ -65,12 +70,20 @@ public class ContactsManager {
         String name = scan.nextLine();
         System.out.println("  Name  | Phone number");
         System.out.println("-----------------------");
+        int count = 0;
         for (String line: FileHelper.slurp("contacts.txt")){
             if (line.toLowerCase().contains(name.toLowerCase())){
                 System.out.println(line);
+                count++;
             }
         }
-
+        if (count == 0){
+            System.out.println("Sorry, that contact does not exist.");
+            System.out.println("Would you like to add contact?");
+            if (input.yesNo()){
+                addContact();
+            }
+        }
     }
     public static void deleteContact(){
         List <String> searchResults = new ArrayList<>();
