@@ -33,7 +33,7 @@ public class FileHelper {
 
     public static void spit(String filename, List<String> contents){
         try{
-            Files.write(Paths.get(filename), contents, StandardOpenOption.CREATE);
+            Files.write(Paths.get(filename), contents);
         }catch(IOException e){
             e.printStackTrace();
             System.exit(1);

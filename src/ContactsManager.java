@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -8,7 +9,9 @@ public class ContactsManager {
     public static void main(String[] args) {
 //        addContact();
 //        viewContacts();
-        searchContact();
+//        searchContact();
+        deleteContact();
+        viewContacts();
 //        do {
 //            System.out.println("1. View contact");
 //            System.out.println("2. Add a new contact.");
@@ -48,6 +51,30 @@ public class ContactsManager {
                 System.out.println(line);
             }
         }
+
+    }
+    public static void deleteContact(){
+        List <String> searchResults = new ArrayList<>();
+        List<String> newList = new ArrayList<>();
+        System.out.println("Enter contact name to delete:");
+        String name = scan.nextLine();
+        List<String> list = FileHelper.slurp("contacts.txt");
+        for (int i = 0; i < list.size(); i += 1) {
+            if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
+                searchResults.add(list.get(i));
+            }
+        }
+        if(searchResults.size() == 1){
+            for (int i = 0; i < list.size(); i += 1) {
+                if (list.get(i).toLowerCase().contains(name.toLowerCase())) {
+                    continue;
+                }
+                newList.add(list.get(i));
+            }
+            FileHelper.spit("contacts.txt", newList);
+        }
+//        System.out.println("  Name  | Phone number");
+//        System.out.println("-----------------------");
 
     }
 
