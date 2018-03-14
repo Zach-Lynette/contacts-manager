@@ -19,7 +19,7 @@ public class ContactsManager {
                 System.out.println("Enter contact phone number: ");
                 String number = input.getString();
                 number = formattedNumber(number);
-                FileHelper.spit("contacts.txt", Arrays.asList(String.format("%15s | %13s", initialName, number)));
+                FileHelper.spit("contacts.txt", Arrays.asList(String.format("%17s | %13s", initialName, number)));
             }
         do {
             System.out.println("----------------------------------------");
