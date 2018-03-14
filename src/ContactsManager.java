@@ -19,7 +19,7 @@ public class ContactsManager {
                 System.out.println("Enter contact phone number: ");
                 String number = input.getString();
                 number = formattedNumber(number);
-                FileHelper.spit("contacts.txt", Arrays.asList(String.format("%15s | %13s", initialName, number)));
+                FileHelper.spit("contacts.txt", Arrays.asList(String.format("%17s | %13s", initialName, number)));
             }
         do {
             System.out.println("----------------------------------------");
@@ -84,6 +84,10 @@ public class ContactsManager {
         }
         System.out.println("Please enter the contact phone-number:");
         String phoneNumber = scan.nextLine();
+        while(phoneNumber.length() != 7 && phoneNumber.length() != 10) {
+            System.out.println("That is not a valid phone number. Please try again!");
+            phoneNumber = scan.nextLine();
+        }
         phoneNumber = formattedNumber(phoneNumber);
         List<String> contact = Arrays.asList(String.format("%17s | %13s", name, phoneNumber));
         FileHelper.spit("contacts.txt", contact, true);
@@ -104,6 +108,7 @@ public class ContactsManager {
             System.out.println("Sorry, that contact does not exist.");
             System.out.println("Would you like to add contact?");
             if (input.yesNo()){
+                input.getString();
                 addContact();
             }
         }
